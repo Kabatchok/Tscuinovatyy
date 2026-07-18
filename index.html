@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Укрзалізниця Roblox - Офіційний сервіс придбання квитків</title>
+    <style>
+        :root {
+            --uz-blue: #002f6c;
+            --uz-yellow: #ffc72c;
+            --uz-light-blue: #0056b3;
+            --uz-gray: #f4f5f7;
+            --uz-dark-gray: #333333;
+            --uz-border: #cbd5e1;
+            --uz-green: #28a745;
+            --uz-red: #dc3545;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--uz-gray);
+            color: var(--uz-dark-gray);
+            line-height: 1.6;
+        }
+
+        /* Шапка сайту */
+        header {
+            background-color: var(--uz-blue);
+            color: white;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid var(--uz-yellow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 22px;
+            letter-spacing: 0.5px;
+        }
+
+        .logo span {
+            color: var(--uz-yellow);
+        }
+
+        .logo-sub {
+            font-size: 11px;
+            display: block;
+            color: #cbd5e1;
+            font-weight: 400;
+            margin-top: -2px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        nav ul li a:hover {
+            color: var(--uz-yellow);
+        }
+
+        /* Контейнер */
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* Головна віджет-форма */
+        .search-box {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        .search-title {
+            font-size: 22px;
+            color: var(--uz-blue);
+            margin-bottom: 25px;
+            font-weight: 700;
+            border-left: 5px solid var(--uz-yellow);
+            padding-left: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .booking-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Спеціальний блок Напрямку за запитом користувача */
+        .direction-container {
+            background: #f8fafc;
+            border: 1px solid var(--uz-border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            padding: 15px 20px;
+        }
+
+        .input-group label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #64748b;
+            font-weight: 700;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .input-group select {
+            border: none;
+            background: transparent;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--uz-blue);
+            outline: none;
+            width: 100%;
+            cursor: pointer;
+            padding-right: 10px;
+        }
+
+        /* Стрілочка посередині як просив користувач */
+        .divider-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 0;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+            color: var(--uz-yellow);
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s;
+        }
+        
+        .divider-arrow:hover {
+            background: #f8fafc;
+        }
+
+        /* Блок верифікації Нікнейму */
+        .user-info-group {
+            background: #fffbeb;
+            border: 1px dashed #f59e0b;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .user-info-group label {
+            font-weight: 700;
+            color: #b45309;
+            font-size: 15px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .user-info-group p {
+            font-size: 13px;
+            color: #78350f;
+            margin-bottom: 12px;
+        }
+
+        .user-info-group input {
+            border: 1px solid #d97706;
+            background: white;
+            padding: 12px 15px;
+            border-radius: 6px;
+            font-size: 16px;
+            width: 100%;
+            outline: none;
+            color: var(--uz-blue);
+            font-weight: 600;
+        }
+
+        .user-info-group input:focus {
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+        }
+
+        .btn-search {
+            background-color: var(--uz-yellow);
+            color: var(--uz-blue);
+            border: none;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(255, 199, 44, 0.3);
+        }
+
+        .btn-search:hover {
+            background-color: #e5b223;
+        }
+
+        .btn-search:active {
+            transform: scale(0.99);
+        }
+
+        /* Секція рейсів */
+        .results-section {
+            margin-top: 35px;
+            display: none;
+        }
+
+        .train-card {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--uz-border);
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        .train-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+
+        .train-number {
+            background: #e2e8f0;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--uz-blue);
+        }
+
+        .train-status {
+            color: var(--uz-green);
+            font-weight: 700;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .train-status::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--uz-green);
+            border-radius: 50%;
+        }
+
+        .route-timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .station-time {
+            min-width: 100px;
+        }
+
+        .station-time.end {
+            text-align: right;
+        }
+
+        .time {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--uz-blue);
+        }
+
+        .station-name {
+            font-size: 14px;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        .duration-line {
+            flex-grow: 1;
+            margin: 0 25px;
+            text-align: center;
+            position: relative;
+        }
+
+        .duration-line::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #cbd5e1;
+            z-index: 1;
+        }
+
+        .duration-text {
+            background: white;
+            padding: 0 10px;
+            font-size: 13px;
+            color: #64748b;
+            position: relative;
+            z-index: 2;
+            font-weight: 500;
+        }
+
+        .btn-buy {
+            background: var(--uz-blue);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            width: 100%;
+            font-size: 15px;
+            transition: background 0.2s;
+        }
+
+        .btn-buy:hover {
+            background: var(--uz-light-blue);
+        }
+
+        /* Прес-центр та Новини */
+        .news-section {
+            margin-top: 50px;
+        }
+
+        .news-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .news-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            border: 1px solid var(--uz-border);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .news-img-side {
+            background: var(--uz-blue);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 16px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 0.5px;
+            border-bottom: 4px solid var(--uz-yellow);
+        }
+
+        .news-card.corruption .news-img-side {
+            background: #7f1d1d;
+            border-bottom: 4px solid var(--uz-red);
+        }
+
+        .news-content {
+            padding: 25px;
+        }
+
+        .news-date {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .news-title {
+            font-size: 20px;
+            color: var(--uz-blue);
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .news-text {
+            font-size: 14px;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        .news-highlight {
+            background: #f1f5f9;
+            border-left: 4px solid var(--uz-blue);
+            padding: 10px 15px;
+            margin: 15px 0;
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        /* Модальне вікно квитка */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .ticket-view {
+            border: 2px dashed var(--uz-blue);
+            padding: 20px;
+            margin: 20px 0;
+            background: #fafafa;
+            text-align: left;
+            border-radius: 6px;
+            position: relative;
+        }
+
+        .ticket-title {
+            text-align: center;
+            font-weight: 800;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            color: var(--uz-blue);
+            letter-spacing: 0.5px;
+        }
+
+        .ticket-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            border-bottom: 1px dashed #f1f5f9;
+            padding-bottom: 4px;
+        }
+
+        .ticket-row strong {
+            color: #64748b;
+        }
+
+        .ticket-row span {
+            font-weight: 700;
+            color: var(--uz-blue);
+        }
+
+        .close-btn {
+            background: var(--uz-blue);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            margin-top: 10px;
+            width: 100%;
+            font-size: 15px;
+        }
+
+        .close-btn:hover {
+            background: var(--uz-light-blue);
+        }
+
+        /* Підвал */
+        footer {
+            background: var(--uz-blue);
+            color: rgba(255,255,255,0.6);
+            text-align: center;
+            padding: 25px;
+            font-size: 13px;
+            margin-top: 60px;
+            border-top: 4px solid var(--uz-yellow);
+        }
+
+        @media(min-width: 768px) {
+            .news-card {
+                flex-direction: row;
+            }
+            .news-img-side {
+                width: 240px;
+                min-width: 240px;
+                border-bottom: none;
+                border-right: 4px solid var(--uz-yellow);
+            }
+            .news-card.corruption .news-img-side {
+                border-right: 4px solid var(--uz-red);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Навігаційна панель -->
+    <header>
+        <div class="logo">
+            Укр<span>залізниця</span>
+            <span class="logo-sub">Roblox Електронний Квиток</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a onclick="window.scrollTo({top: 0, behavior: 'smooth'})">Замовлення</a></li>
+                <li><a onclick="document.getElementById('news-section').scrollIntoView({behavior: 'smooth'})">Новини сервісу</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        
+        <!-- Віджет бронювання квитків -->
+        <div class="search-box">
+            <div class="search-title">
+                <span>Придбання проїзних документів</span>
+                <span style="font-size: 12px; background: #dcfce7; color: var(--uz-green); padding: 4px 8px; border-radius: 4px;">Сервер Активний</span>
+            </div>
+            
+            <form class="booking-form" onsubmit="searchTrains(event)">
+                
+                <div class="direction-container">
+                    <!-- Звідки (Компонент стоїть вгорі) -->
+                    <div class="input-group">
+                        <label for="from-station">Звідки (Станція відправлення) ?</label>
+                        <select id="from-station" required>
+                            <option value="Знам'янка">Знам'янка</option>
+                            <option value="Тимкове">Тимкове</option>
+                            <option value="Згода">Згода</option>
+                            <option value="Куцівка">Куцівка</option>
+                            <option value="Казанка">Казанка</option>
+                            <option value="Долинська">Долинська</option>
+                            <option value="Маржанівка">Маржанівка</option>
+                        </select>
+                    </div>
+
+                    <!-- Стрілочка посередині напрямків -->
+                    <div class="divider-arrow" onclick="swapStations()" title="Змінити напрямки місцями">
+                        ⇅
+                    </div>
+
+                    <!-- Куди (Компонент стоїть знизу) -->
+                    <div class="input-group">
+                        <label for="to-station">Куди (Станція призначення) ?</label>
+                        <select id="to-station" required>
+                            <option value="Долинська" selected>Долинська</option>
+                            <option value="Знам'янка">Знам'янка</option>
+                            <option value="Тимкове">Тимкове</option>
+                            <option value="Згода">Згода</option>
+                            <option value="Куцівка">Куцівка</option>
+                            <option value="Казанка">Казанка</option>
+                            <option value="Маржанівка">Маржанівка</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Валідація користувача в системі Roblox -->
+                <div class="user-info-group">
+                    <label for="roblox-nick">Верифікація облікового запису Roblox *</label>
+                    <p>Введіть ваш точний нікнейм. Система автоматично запише його у базу даних гри для перевірки провідниками.</p>
+                    <input type="text" id="roblox-nick" placeholder="Введіть ваш нікнейм (наприклад: Stepan_Train2026)" required>
+                </div>
+
+                <button type="submit" class="btn-search">Пошук рейсів у розкладі</button>
+            </form>
+        </div>
+
+        <!-- Результати запиту поїздів -->
+        <div class="results-section" id="results">
+            <div class="search-title">Знайдені поїзди згідно з розкладом руху</div>
+            <div id="trains-list"></div>
+        </div>
+
+        <!-- Прес-центр / Блок новин та реформ -->
+        <div class="news-section" id="news-section">
+            <div class="search-title">Прес-центр & Важливі Реформи</div>
+            
+            <div class="news-grid">
+                
+                <!-- Новина №1: Боротьба з корупцією -->
+                <div class="news-card corruption">
+                    <div class="news-img-side">
+                        Увага!<br>Служба Безпеки<br>Депо
+                    </div>
+                    <div class="news-content">
+                        <div class="news-date">18 Липня, 2026 року</div>
+                        <div class="news-title">Антикорупційна реформа: Ліквідовано схему «безквиткових» донатів</div>
+                        <div class="news-text">
+                            Департамент безпеки віртуального залізничного напрямку спільно з вищою адміністрацією завершив спецоперацію на станціях Тимкове та Куцівка. У ході перевірки було виявлено групу кондукторів-стажерів, які за Robux або внутрішньоігрові подарунки дозволяли гравцям їздити на дахах приміських поїздів або в кабінах машиністів без офіційного оформлення.
+                            <div class="news-highlight">
+                                «Корупції на коліях не буде! Відтепер кожен провідник має персональний КПК, підключений до бази даних цього сайту. Якщо вашого нікнейму немає в системі електронних квитків — вас буде негайно висаджено на найближчій платформі», — заявив Начальник Служби Руху.
+                            </div>
+                            Впровадження цієї цифрової платформи повністю виключає людський фактор. Купуйте квитки офіційно та підтримуйте порядок у нашому Roblox-депо!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Новина №2: Саміт та розклад на основі скріншотів -->
+                <div class="news-card">
+                    <div class="news-img-side">
+                        Графік Руху<br>Саміт 2026
+                    </div>
+                    <div class="news-content">
+                        <div class="news-date">17 Липня, 2026 року</div>
+                        <div class="news-title">Технічний саміт: Інтеграція нового розкладу для рейсів 6043/6044 та 6317</div>
+                        <div class="news-text">
+                            На позачерговому з'їзді розробників та диспетчерів гри було успішно проведено реформування часових інтервалів. На основі надісланих фотоматеріалів з місць, розробники синхронізували ігрову базу даних з реальними прототипами станцій УЗ.
+                            <br><br>
+                            Поїзд <strong>№6043/6044</strong> сполученням Знам'янка — Долинська отримав фіксований час ходу (1 год 53 хв) із обов'язковим прослідуванням через колії станції Знам'янка-Сортувальна. Диспетчерська система по станціях Куцівка та Згода відтепер працює автоматично зі статусом відображення «Вчасно». Всі дані про запізнення поїздів №121 та №110 відтепер транслюються на головне табло вокзалів у режимі реального часу.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Модальне вікно електронного квитка -->
+    <div class="modal" id="ticketModal">
+        <div class="modal-content">
+            <h3 style="color: var(--uz-green); font-size: 20px; margin-bottom: 5px;">✔ Оформлення успішне!</h3>
+            <p style="font-size: 13px; color: #64748b; margin-bottom: 15px;">Квиток успішно внесено до електронної бази даних пасажирів.</p>
+            
+            <div class="ticket-view">
+                <div class="ticket-title">ЕЛЕКТРОННИЙ КВИТОК УЗ (ROBLOX)</div>
+                <div class="ticket-row">
+                    <strong>Нікнейм Пасажира:</strong>
+                    <span id="t-nick" style="color: var(--uz-red); font-size: 15px;">-</span>
+                </div>
+                <div class="ticket-row">
+                    <strong>Номер Поїзда:</strong>
+                    <span id="t-train">-</span>
+                </div>
+                <div class="ticket-row">
+                    <strong>Напрямок:</strong>
+                    <span id="t-route">-</span>
+                </div>
+                <div class="ticket-row">
+                    <strong>Час відправлення:</strong>
+                    <span id="t-time">-</span>
+                </div>
+                <div class="ticket-row">
+                    <strong>Вартість тарифу:</strong>
+                    <span style="color: var(--uz-green);">0 UAH (Сплачено сервером)</span>
+                </div>
+                <div style="margin-top: 15px; font-size: 11px; text-align: center; color: #64748b; font-style: italic; line-height: 1.3;">
+                    При посадці у вагони електропоїздів ЕР9К або купейні вагони просто назвіть свій нік кондуктору для звірки через КПК.
+                </div>
+            </div>
+            
+            <button class="close-btn" onclick="closeModal()">Закрити вікно квитка</button>
+        </div>
+    </div>
+
+    <!-- Підвал -->
+    <footer>
+        &copy; 2026 Віртуальне Депо Укрзалізниці в Roblox. Розроблено для інтеграції RolePlay процесу. Сайт є ігровою симуляцією.
+    </footer>
+
+    <!-- Скрипти логіки застосунку -->
+    <script>
+        // База даних рейсів (повністю збігається зі скріншотами)
+        const trainDatabase = [
+            { number: "6043/6044", from: "Знам'янка", to: "Долинська", timeStart: "17:25", timeEnd: "19:18", duration: "1 год 53 хв", note: "Через Знам'янка-Сортувальна" },
+            { number: "6317", from: "Згода", to: "Тимкове", timeStart: "01:37", timeEnd: "02:45", duration: "1 год 08 хв", note: "Вчасно" },
+            { number: "122", from: "Казанка", to: "Тимкове", timeStart: "03:37", timeEnd: "04:50", duration: "1 год 13 хв", note: "Пасажирський" },
+            { number: "6039", from: "Тимкове", to: "Долинська", timeStart: "05:25", timeEnd: "06:10", duration: "45 хв", note: "Приміський" },
+            { number: "6041", from: "Тимкове", to: "Куцівка", timeStart: "07:18", timeEnd: "08:02", duration: "44 хв", note: "Приміський" },
+            { number: "6035/6036", from: "Маржанівка", to: "Тимкове", timeStart: "08:15", timeEnd: "09:30", duration: "1 год 15 хв", note: "Вчасно" },
+            { number: "6313", from: "Згода", to: "Куцівка", timeStart: "13:00", timeEnd: "13:45", duration: "45 хв", note: "Вчасно" },
+            { number: "121", from: "Куцівка", to: "Долинська", timeStart: "13:06", timeEnd: "14:15", duration: "1 год 09 хв", note: "Вчасно" },
+            { number: "110", from: "Куцівка", to: "Знам'янка", timeStart: "17:00", timeEnd: "18:20", duration: "1 год 20 хв", note: "Швидкий" }
+        ];
+
+        // Функція перекидання напрямків (стрілочка)
+        function swapStations() {
+            const from = document.getElementById('from-station');
+            const to = document.getElementById('to-station');
+            const temp = from.value;
+            from.value = to.value;
+            to.value = temp;
+        }
+
+        // Пошук рейсів у системі
+        function searchTrains(event) {
+            event.preventDefault();
+            const from = document.getElementById('from-station').value;
+            const to = document.getElementById('to-station').value;
+            const nick = document.getElementById('roblox-nick').value;
+
+            if (!nick.trim()) {
+                alert("Помилка: Введіть ваш діючий Roblox нікнейм!");
+                return;
+            }
+
+            const resultsDiv = document.getElementById('results');
+            const listDiv = document.getElementById('trains-list');
+            listDiv.innerHTML = '';
+
+            // Шукаємо прямі або прохідні поїзди
+            let matches = trainDatabase.filter(t => t.from === from || t.to === to);
+            
+            // Якщо немає точного збігу, створюємо динамічний регулярний рейс для геймплею
+            if (matches.length === 0) {
+                matches = [
+                    { number: "7002/7003", from: from, to: to, timeStart: "14:20", timeEnd: "15:50", duration: "1 год 30 хв", note: "Додатковий Roblox Рейс" }
+                ];
+            }
+
+            // Рендеримо картки поїздів
+            matches.forEach(train => {
+                const card = document.createElement('div');
+                card.className = 'train-card';
+                card.innerHTML = `
+                    <div class="train-header">
+                        <span class="train-number">Поїзд № ${train.number}</span>
+                        <span class="train-status">${train.note}</span>
+                    </div>
+                    <div class="route-timeline">
+                        <div class="station-time">
+                            <div class="time">${train.timeStart}</div>
+                            <div class="station-name">${train.from}</div>
+                        </div>
+                        <div class="duration-line">
+                            <span class="duration-text">${train.duration}</span>
+                        </div>
+                        <div class="station-time end">
+                            <div class="time">${train.timeEnd}</div>
+                            <div class="station-name">${train.to}</div>
+                        </div>
+                    </div>
+                    <button class="btn-buy" onclick="buyTicket('${escapeHtml(nick)}', '${train.number}', '${train.from} → ${train.to}', '${train.timeStart}')">Оформити безкоштовний електронний квиток</button>
+                `;
+                listDiv.appendChild(card);
+            });
+
+            resultsDiv.style.display = 'block';
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Логіка відкриття квитка
+        function buyTicket(nick, trainNum, route, time) {
+            document.getElementById('t-nick').innerText = nick;
+            document.getElementById('t-train').innerText = '№ ' + trainNum;
+            document.getElementById('t-route').innerText = route;
+            document.getElementById('t-time').innerText = time;
+            
+            document.getElementById('ticketModal').style.display = 'flex';
+        }
+
+        // Закриття модального вікна
+        function closeModal() {
+            document.getElementById('ticketModal').style.display = 'none';
+        }
+
+        // Безпека введення
+        function escapeHtml(string) {
+            return String(string).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+    </script>
+</body>
+</html>
